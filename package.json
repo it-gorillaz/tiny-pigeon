@@ -4,7 +4,18 @@
   "description": "Simple Serverless Email Service",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha 'tests/unit/**/*.js'",
+    "coverage": "nyc --reporter html --reporter text npm test"
+  },
+  "nyc": {
+    "all": false,
+    "check-coverage": true,
+    "excludeNodeModules": true,
+    "branches": 80,
+    "lines": 80,
+    "functions": 80,
+    "statements": 80,
+    "exclude": []
   },
   "repository": {
     "type": "git",
