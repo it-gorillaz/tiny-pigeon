@@ -1,0 +1,43 @@
+{
+  "name": "tiny-pigeon",
+  "version": "1.0.0",
+  "description": "Simple Serverless Email Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/it-gorillaz/tiny-pigeon.git"
+  },
+  "keywords": [
+    "email",
+    "serverless",
+    "aws",
+    "ses",
+    "sns",
+    "sqs"
+  ],
+  "author": "Tom Melo",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/it-gorillaz/tiny-pigeon/issues"
+  },
+  "homepage": "https://github.com/it-gorillaz/tiny-pigeon#readme",
+  "dependencies": {
+    "@hapi/joi": "^17.1.1",
+    "aws-sdk": "^2.673.0",
+    "bluebird": "^3.7.2",
+    "lodash": "^4.17.15",
+    "mask-json": "^1.0.3",
+    "moment-timezone": "^0.5.28",
+    "nodemailer": "^6.4.6"
+  },
+  "devDependencies": {
+    "aws-sdk-mock": "^5.1.0",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.2",
+    "nyc": "^15.0.1",
+    "sinon": "^9.0.2"
+  }
+}
