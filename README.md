@@ -15,7 +15,7 @@ Simple Serverless Email Service
 6. [License](#license)
 
 ## About
----
+
 **tiny-pigeon** is a simple serverless email service that runs on top of the AWS Serverless Stack(AWS Lambda, DynamoDB, S3, SQS, SNS and SES).
 
 It aims to simplify the flow of sending emails ,handling bounces and monitoring.
@@ -24,7 +24,7 @@ The service was not designed to handle complex workflows, but rather centralize 
 
 
 ## Architectural Overview
----
+
 ![Architecture Diagram](/docs/architecture_diagram.jpg)
 
 ## Deployment
@@ -104,26 +104,26 @@ custom:
     prod: 'email-bounces-topic'
 ```
 
-### deploymentBucket
+#### deploymentBucket
 A specific S3 bucket name to deploy the artifacts.
 
-### dateTimeFormat
+#### dateTimeFormat
 The date and time format to be used by the application(Logs and Items saved to the database).
 
-### redact
+#### redact
 A string separated by commas of all the attributes that should be redacted in the logs
 
-### blacklistedEmailsTable
+#### blacklistedEmailsTable
 The name of table to save bounces/blacklisted emails.
 
-### emailQueueName
+#### emailQueueName
 The name of the SQS queue.
 
-### emailBouncesTopicName
+#### emailBouncesTopicName
 The name of the SNS topic.
 
 ## Service Integration
----
+
 The service will process SQS messages with the following JSON body:
 
 ```
@@ -157,67 +157,67 @@ The service will process SQS messages with the following JSON body:
 
 ```
 
-### client ```string``` (Required) 
+#### client ```string``` (Required) 
 
 The application name that is requesting to send an email.
 
-### emailType ```string``` (Required) 
+#### emailType ```string``` (Required) 
 Supported types: ```RAW_TEXT```, ```HTML_BODY``` and ```HTML_TEMPLATE_FILE```.
 
-### failOnBlacklistedEmail ```boolean``` (Required)
+#### failOnBlacklistedEmail ```boolean``` (Required)
 Indicates if the operation should fail if at least one email is blacklisted.
 
 By default, the service removes any email found in the blacklist before sending.
 
 Note that the operation will fail if the recipient(**to** attribute) is blacklisted.
 
-### from ```string``` (Required)
+#### from ```string``` (Required)
 Email address of the sender.
 
-### to ```[string]``` (Required)
+#### to ```[string]``` (Required)
 One or more email address of the recipient(s).
 
-### cc ```[string]```
+#### cc ```[string]```
 One or more email address for the carbon copy.
 
-### bcc ```[string]```
+#### bcc ```[string]```
 One or more email address for the blind carbon copy.
 
-### replyTo ```string``` (Required)
+#### replyTo ```string``` (Required)
 Email address to reply the message.
 
-### subject ```string``` (Required)
+#### subject ```string``` (Required)
 The email subject.
 
-### subjectParams ```object```
+#### subjectParams ```object```
 An object containing the attributes to be replaced in the subject text.
 
-### body ```string``` (Required if **emailType** is ```RAW_TEXT``` or ```HTML_BODY```)
+#### body ```string``` (Required if **emailType** is ```RAW_TEXT``` or ```HTML_BODY```)
 The content of the email
 
-### bodyParams ```object```
+#### bodyParams ```object```
 An object containing the attributes to be replaced in the email body.
 
-### htmlTemplateDir ```string``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
+#### htmlTemplateDir ```string``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
 The directory of the html template file.
 
-### htmlTemplateFile ```string``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
+#### htmlTemplateFile ```string``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
 The name of the html template file.
 
-### attachments ```[object]```
+#### attachments ```[object]```
 An array of objects specifying the files that should be attached to the email.
 
-### attachments[index].attachmentDir ```string``` (Required)
+#### attachments[index].attachmentDir ```string``` (Required)
 The directory of the file.
 
-### attachments[index].attachmentFile ```string``` (Required)
+#### attachments[index].attachmentFile ```string``` (Required)
 The name of the file.
 
-### attachments[index].attachAsFileName ```string```
+#### attachments[index].attachAsFileName ```string```
 The name of the attachment on the email.
 
 ## Consuming the Service
----
+
 Example of how to send an email(Node.js):
 
 ```
@@ -257,7 +257,7 @@ sendEmail(email)
 ```
 
 ## Working with Parameterized Attributes
----
+
 The service will transform the content of the **subject** and the **body** based on the attributes **subjectParams** and **bodyParams**:
 ```
 {
@@ -278,7 +278,7 @@ The service will transform the content of the **subject** and the **body** based
 ```
 
 ## Working with HTML Template Files
----
+
 The current version of the service supports working with HTML template files stored on S3.
 The content of the html file will be transformed using the **bodyParams** attributes and it will be sent as email body.
 
@@ -292,7 +292,7 @@ The content of the html file will be transformed using the **bodyParams** attrib
 ```
 
 ## Working with Attachments
----
+
 The current version of the service supports attaching files stored on S3.
 
 ```
@@ -310,7 +310,7 @@ The current version of the service supports attaching files stored on S3.
 ```
 
 ## License
----
+
 This service is licensed under the [MIT License](./LICENSE.txt).
 
 All files located in the node_modules and external directories are externally maintained libraries used by this software which have their own licenses; we recommend you read them, as their terms may differ from the terms in the MIT License.
