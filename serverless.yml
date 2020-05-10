@@ -1,0 +1,113 @@
+service:
+  name: tiny-pigeon-email-service
+
+package:
+  exclude:
+    - "tests/**"
+    - "docs/**"
+  
+custom:
+  deploymentBucket: 'tiny-pigeon-email-service-deployment-artifacts'
+  dateTimeFormat: 'YYYY-MM-DDTHH:mm:ss'
+  timezone: 'Europe/Berlin'
+  redact: 'username,password,credentials,secret'
+  blacklistedEmailsTable:
+    dev: 'blacklisted_emails_dev'
+    prod: 'blacklisted_emails'
+  emailQueueName:
+    dev: 'email-queue-dev'
+    prod: 'email-queue'
+  emailBouncesTopicName:
+    dev: 'email-bounces-topic-dev'
+    prod: 'email-bounces-topic'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: ${opt:stage, 'dev'}
+  region: ${opt:region, 'us-east-1'}
+  memorySize: 128
+  timeout: 10
+  logRetentionInDays: 14
+  deploymentBucket:
+    name: ${self:custom.deploymentBucket}
+    blockPublicAccess: true
+  environment:
+    REGION: ${self:provider.region}
+    DATE_TIME_FORMAT: ${self:custom.dateTimeFormat}
+    TIMEZONE: ${self:custom.timezone}
+    REDACT: ${self:custom.redact}
+    BLACKLISTED_EMAILS_TABLE: ${self:custom.blacklistedEmailsTable.${self:provider.stage}}
+  iamRoleStatements:
+    -
+      Effect: Allow
+      Action:
+        - 's3:HeadObject'
+        - 's3:GetObject'
+      Resource:
+        - 'arn:aws:s3:::*/*'
+    -
+      Effect: Allow
+      Action:
+        - 'dynamodb:BatchGetItem'
+        - 'dynamodb:BatchWriteItem'
+      Resource:
+        - !GetAtt [BlacklistedEmailsDynamoDBTable, Arn]
+    -
+      Effect: Allow
+      Action:
+        - 'ses:SendRawEmail'
+      Resource:
+        - 'arn:aws:ses:*:*:identity/*'
+
+functions:
+
+  sqs-email-message-consumer:
+    handler: index.handler
+    description: 'Handles SQS email events'
+    environment:
+      EVENT_TYPE: SQS
+    events:
+      - sqs:
+          batchSize: 1
+          arn: !GetAtt [EmailQueue, Arn]
+
+  sns-email-bounce-subscriber:
+    handler: index.handler
+    description: 'Handles SNS email bounce notification events'
+    environment:
+      EVENT_TYPE: SNS
+    events:
+      - sns:
+          arn: !Ref EmailBouncesTopic
+          topicName: ${self:custom.emailBouncesTopicName.${self:provider.stage}}
+
+resources:
+  Resources:
+    
+    EmailQueue:
+      Type: AWS::SQS::Queue
+      DeletionPolicy: Retain
+      Properties:
+        QueueName: ${self:custom.emailQueueName.${self:provider.stage}}
+    
+    EmailBouncesTopic:
+      Type: AWS::SNS::Topic
+      DeletionPolicy: Retain
+      Properties:
+        TopicName: ${self:custom.emailBouncesTopicName.${self:provider.stage}}
+
+    BlacklistedEmailsDynamoDBTable:
+      Type: AWS::DynamoDB::Table
+      DeletionPolicy: Retain
+      Properties:
+        TableName: ${self:custom.blacklistedEmailsTable.${self:provider.stage}}
+        BillingMode: PAY_PER_REQUEST
+        AttributeDefinitions:
+          -
+            AttributeName: id
+            AttributeType: S
+        KeySchema:
+          -
+            AttributeName: id
+            KeyType: HASH
