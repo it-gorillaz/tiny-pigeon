@@ -28,7 +28,7 @@ The service was not designed to handle complex workflows, but rather centralize 
 ![Architecture Diagram](/docs/architecture_diagram.jpg)
 
 ## Deployment
----
+
 This project makes use of the [Serverless Framework](https://www.serverless.com/) to manage the deployment. Before you continue, make sure you have the [serverless framework CLI](https://www.serverless.com/framework/docs/getting-started/) installed.
 
 
