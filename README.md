@@ -58,7 +58,7 @@ iamRoleStatements:
       - 'arn:aws:ses:*:*:identity/*'
 ```
 
-If you want to deploy the artifacts in a specific S3 bucket, first in necessary to create a bucket.
+If you want to deploy the artifacts in a specific S3 bucket, first is necessary to create a bucket.
 
 
 E.g.:
