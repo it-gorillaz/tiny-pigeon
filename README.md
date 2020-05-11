@@ -161,8 +161,8 @@ The service will process SQS messages with the following JSON body:
   }
   "attachments": [
     {
-      "attachmentDir": "/my/attachment/dir/",
-      "attachmentFile": "attachment.jpg",
+      "dir": "/my/attachment/dir/",
+      "file": "attachment.jpg",
       "attachAsFileName": "image.jpg"
     }
   ]
