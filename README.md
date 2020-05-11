@@ -6,6 +6,10 @@ Simple Serverless Email Service
 1. [About](#about)
 2. [Architectural Overview](#architectural-overview)
 3. [Deployment](#deployment)    
+    1. [Review](#review)
+    2. [Deployment Bucket](#deployment-bucket)
+    3. [Deploy](#deploy)
+    4. [Customize](#customize)
 4. [Service Integration](#service-integration)
 5. [Email Service](#consuming-the-service)
     1. [Consuming the Service](consuming-the-service)
@@ -32,7 +36,8 @@ The service was not designed to handle complex workflows, but rather centralize 
 This project makes use of the [Serverless Framework](https://www.serverless.com/) to manage the deployment. Before you continue, make sure you have the [serverless framework CLI](https://www.serverless.com/framework/docs/getting-started/) installed.
 
 
-**Before you begin**: It is recommended to review the **iamRoleStatements** under the **provider** section in the serverless.yml file and adapt accordingly to define fine grained access control to your resources:
+### Review
+It is recommended to review the **iamRoleStatements** under the **provider** section in the serverless.yml file and adapt accordingly to define fine grained access control to your resources:
 
 ```
 iamRoleStatements:
@@ -58,6 +63,9 @@ iamRoleStatements:
       - 'arn:aws:ses:*:*:identity/*'
 ```
 
+Note that the all the IAM Action statements are necessary for the application to work properly, the Resource Arns can be limited to meet the security requirements.
+
+### Deployment Bucket
 If you want to deploy the artifacts in a specific S3 bucket, first is necessary to create a bucket.
 
 
@@ -79,12 +87,15 @@ deploymentBucket:
   blockPublicAccess: true
 ```
 
+### Deploy
+
 After the initial setup you can run the following command to deploy the service with the default settings:
 ```
 npm install --production
 serverless deploy --stage prod
 ```
 
+### Customize
 You can customize the default settings of the deployment by changing the values of the attributes under the **custom** section in the serverless.yml file:
 
 ```
@@ -144,8 +155,10 @@ The service will process SQS messages with the following JSON body:
   "bodyParams": {
     "foo": "bar"
   },
-  "htmlTemplateDir": "/my/template/dir/",
-  "htmlTemplateFile": "my-template.html",
+  "template": {
+    "dir": "/my/template/dir/",
+    "file": "my-template.html"
+  }
   "attachments": [
     {
       "attachmentDir": "/my/attachment/dir/",
@@ -198,19 +211,22 @@ The content of the email
 #### bodyParams ```object```
 An object containing the attributes to be replaced in the email body.
 
-#### htmlTemplateDir ```string``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
+#### template ```object``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
+The template file spec
+
+#### template.dir ```string``` (Required)
 The directory of the html template file.
 
-#### htmlTemplateFile ```string``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
+#### template.file ```string``` (Required)
 The name of the html template file.
 
 #### attachments ```[object]```
 An array of objects specifying the files that should be attached to the email.
 
-#### attachments[index].attachmentDir ```string``` (Required)
+#### attachments[index].dir ```string``` (Required)
 The directory of the file.
 
-#### attachments[index].attachmentFile ```string``` (Required)
+#### attachments[index].file ```string``` (Required)
 The name of the file.
 
 #### attachments[index].attachAsFileName ```string```
@@ -286,8 +302,10 @@ The content of the html file will be transformed using the **bodyParams** attrib
 {
   ...
   "emailType": "HTML_TEMPLATE_FILE",
-  "htmlTemplateDir": "my-bucket-name",
-  "htmlTemplateFile": "path/to/file.html"
+  "template": {
+    "dir": "my-bucket-name",
+    "file": "path/to/file.html"
+  }
 }
 ```
 
@@ -300,8 +318,8 @@ The current version of the service supports attaching files stored on S3.
   ...
   "attachments": [
     {
-      "attachmentDir": "my-bucket-name",
-      "attachmentFile": "attachment.jpg",
+      "dir": "my-bucket-name",
+      "file": "attachment.jpg",
       "attachAsFileName": "image.jpg"
     }
   ]
