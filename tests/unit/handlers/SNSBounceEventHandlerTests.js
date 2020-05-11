@@ -1,6 +1,6 @@
 const sinon = require("sinon"),
       { expect } = require("chai"),
-      { SNSBounceEventHandler } = require("../../../lib/handlers");
+      { SNSBounceEventHandler, SNSEventAdapter } = require("../../../lib/handlers");
 
 describe("SNSBounceEventHandler", () => {
 
@@ -37,6 +37,7 @@ describe("SNSBounceEventHandler", () => {
         ]
       }
 
+      new SNSEventAdapter().adapt(event);
       await handler.handleEvent(event);
 
       expect(true).to.equal(executeFake.calledOnce);

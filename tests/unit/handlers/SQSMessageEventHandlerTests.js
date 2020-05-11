@@ -1,6 +1,6 @@
 const sinon = require("sinon"),
       { expect } = require("chai"),
-      { SQSMessageEventHandler } = require("../../../lib/handlers");
+      { SQSMessageEventHandler, SQSEventAdapter } = require("../../../lib/handlers");
 
 describe("SQSMessageEventHandler", () => {
 
@@ -35,6 +35,7 @@ describe("SQSMessageEventHandler", () => {
         ]
       }
 
+      new SQSEventAdapter().adapt(event);
       await handler.handleEvent(event);
 
       expect(true).to.equal(executeFake.calledOnce);
