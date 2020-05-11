@@ -81,7 +81,7 @@ describe("DefaultEventHandler", () => {                                         
       const handler = new DefaultEventHandler(EventType.SNS, modules);
       await handler.handleEvent({});
 
-      expect(true).to.be.equal(handleEventFake.calledOnce);
+      expect(true).to.be.equal(eventAdapterFake.calledOnce);
       expect(true).to.be.equal(handleEventFake.calledOnce);
     });
 
