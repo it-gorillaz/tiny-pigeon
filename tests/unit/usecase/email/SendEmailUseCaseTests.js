@@ -138,8 +138,8 @@ describe("SendEmailUseCase", () => {
         body: "this will fail",
         attachments: [
           {
-            attachmentDir: "any",
-            attachmentFile: "any"
+            dir: "any",
+            file: "any"
           }
         ]
       };
@@ -175,8 +175,7 @@ describe("SendEmailUseCase", () => {
         to: ["any@email.com"],
         subject: "should fail",
         body: "this will fail",
-        htmlTemplateDir: "any",
-        htmlTemplateFile: "any"
+        template: { dir: "any", file: "any" }
       };
 
       const useCase = new SendEmailUseCase(repository, emailGateway, fileStorageGateway);
@@ -188,10 +187,7 @@ describe("SendEmailUseCase", () => {
       expect(true).to.equal(exists.calledOnce);
       expect(false).to.equal(getFileContents.called);
       expect(false).to.equal(sendEmail.called);
-      expect({
-        htmlTemplateDir: request.htmlTemplateDir,
-        htmlTemplateFile: request.htmlTemplateFile
-      }).to.deep.include(result.error);
+      expect({ template: request.template }).to.deep.include(result.error);
 
     });
 
@@ -214,14 +210,8 @@ describe("SendEmailUseCase", () => {
         to: ["any@email.com"],
         subject: "should be ok",
         body: "this should be ok",
-        htmlTemplateDir: "any",
-        htmlTemplateFile: "any",
-        attachments: [
-          {
-            attachmentDir: "any",
-            attachmentFile: "any"
-          }
-        ]
+        template: { dir: "any", file: "any" },
+        attachments: [{ dir: "any", file: "any" }]
       };
 
       const useCase = new SendEmailUseCase(repository, emailGateway, fileStorageGateway);
