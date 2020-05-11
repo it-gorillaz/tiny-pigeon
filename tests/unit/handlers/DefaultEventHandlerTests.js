@@ -21,6 +21,7 @@ describe("DefaultEventHandler", () => {                                         
 
     it("should delegate event to SQSMessageEventHandler", async() => {
       const handleEventFake = sinon.fake(() => {});
+      const eventAdapterFake = sinon.fake(() => {});
 
       const modules = {
         config: {
@@ -35,6 +36,10 @@ describe("DefaultEventHandler", () => {                                         
           [EventType.SQS]: { adapt(event) { return {} } }
         },
 
+        eventAdapters: {
+          [EventType.SQS]: { adapt: eventAdapterFake }
+        },
+
         handlers: {
           [EventType.SQS]: () => { return { handleEvent: handleEventFake } }
         }
@@ -43,11 +48,13 @@ describe("DefaultEventHandler", () => {                                         
       const handler = new DefaultEventHandler(EventType.SQS, modules);
       await handler.handleEvent({});
 
-      expect(true).to.equal(handleEventFake.calledOnce);
+      expect(true).to.be.equal(eventAdapterFake.calledOnce);
+      expect(true).to.be.equal(handleEventFake.calledOnce);
     });
 
     it("should delegate event to SNSBounceEventHandler", async() => {
       const handleEventFake = sinon.fake(() => {});
+      const eventAdapterFake = sinon.fake(() => {});
 
       const modules = {
         config: {
@@ -62,6 +69,10 @@ describe("DefaultEventHandler", () => {                                         
           [EventType.SNS]: { adapt(event) { return {} } }
         },
 
+        eventAdapters: {
+          [EventType.SNS]: { adapt: eventAdapterFake }
+        },
+
         handlers: {
           [EventType.SNS]: () => { return { handleEvent: handleEventFake } }
         }
@@ -70,7 +81,8 @@ describe("DefaultEventHandler", () => {                                         
       const handler = new DefaultEventHandler(EventType.SNS, modules);
       await handler.handleEvent({});
 
-      expect(true).to.equal(handleEventFake.calledOnce);
+      expect(true).to.be.equal(handleEventFake.calledOnce);
+      expect(true).to.be.equal(handleEventFake.calledOnce);
     });
 
   })
