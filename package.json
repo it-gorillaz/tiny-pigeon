@@ -49,6 +49,7 @@
     "chai": "^4.2.0",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
+    "serverless-prune-plugin": "^1.4.3",
     "sinon": "^9.0.2"
   }
 }

@@ -20,6 +20,12 @@ custom:
   emailBouncesTopicName:
     dev: 'email-bounces-topic-dev'
     prod: 'email-bounces-topic'
+  prune:
+    automatic: true
+    number: 3
+
+plugins:
+  - serverless-prune-plugin
 
 provider:
   name: aws
