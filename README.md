@@ -22,19 +22,20 @@ Simple Serverless Email Service
 
 **tiny-pigeon** is a simple serverless email service that runs on top of the AWS Serverless Stack(AWS Lambda, DynamoDB, S3, SQS, SNS and SES).
 
-It aims to simplify the flow of sending emails ,handling bounces and monitoring.
 
-The service was not designed to handle complex workflows, but rather centralize and offer a simple interface for integration between multiple applications that require sending emails.
+The service was not designed to handle complex workflows, but rather offer a simple and centralized interface for integration between applications that require sending emails.
 
 
 ## Architectural Overview
 
-![Architecture Diagram](/docs/architecture_diagram.jpg)
+![Architecture Diagram](/docs/images/architecture_diagram.jpg)
 
 ## Deployment
 
 This project makes use of the [Serverless Framework](https://www.serverless.com/) to manage the deployment. Before you continue, make sure you have the [serverless framework CLI](https://www.serverless.com/framework/docs/getting-started/) installed.
 
+
+Also, the initial setup(accounts, sandboxes and etc) of SES is not handled by this service. Please refer to the [official documentation](https://aws.amazon.com/ses/) to get SES setup.
 
 ### Review
 It is recommended to review the **iamRoleStatements** under the **provider** section in the serverless.yml file and adapt accordingly to define fine grained access control to your resources:
@@ -132,6 +133,27 @@ The name of the SQS queue.
 
 #### emailBouncesTopicName
 The name of the SNS topic.
+
+## Dashboard Monitoring
+
+The service writes log messages in JSON format, which makes it easier to analyze log data using Cloudwatch Insights. 
+
+A few examples of queries that could be used to build a monitoring dashboard:
+
+```
+fields client
+| filter ispresent(payload.data.status) and payload.data.status = "OK"
+| stats count(*) as total by client
+| sort total desc
+```
+![Delivered Emails Count](/docs/images/emails_delivered_count.png)
+
+```
+fields @requestId, client, payload.data.status as status
+| filter ispresent(payload.data.status) and payload.data.status != "OK"
+```
+
+![Failed Messages](/docs/images/failed_messages.png)
 
 ## Service Integration
 
@@ -272,7 +294,7 @@ sendEmail(email)
   .catch((error) => console.error(error));
 ```
 
-## Working with Parameterized Attributes
+### Working with Parameterized Attributes
 
 The service will transform the content of the **subject** and the **body** based on the attributes **subjectParams** and **bodyParams**:
 ```
@@ -293,7 +315,7 @@ The service will transform the content of the **subject** and the **body** based
 }
 ```
 
-## Working with HTML Template Files
+### Working with HTML Template Files
 
 The current version of the service supports working with HTML template files stored on S3.
 The content of the html file will be transformed using the **bodyParams** attributes and it will be sent as email body.
@@ -309,7 +331,7 @@ The content of the html file will be transformed using the **bodyParams** attrib
 }
 ```
 
-## Working with Attachments
+### Working with Attachments
 
 The current version of the service supports attaching files stored on S3.
 
