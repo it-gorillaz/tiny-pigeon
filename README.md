@@ -10,13 +10,14 @@ Simple Serverless Email Service
     2. [Deployment Bucket](#deployment-bucket)
     3. [Deploy](#deploy)
     4. [Customize](#customize)
-4. [Service Integration](#service-integration)
-5. [Email Service](#consuming-the-service)
+4. [Stats Dashboard](#stats-dashboard)
+5. [Service Integration](#service-integration)
+6. [Email Service](#consuming-the-service)
     1. [Consuming the Service](consuming-the-service)
     2. [Working with Parameterized Attributes](#working-with-parameterized-attributes)
     3. [Working with HTML Template Files](#working-with-html-template-files)
     4. [Working with Attachments](#working-with-attachments)
-6. [License](#license)
+7. [License](#license)
 
 ## About
 
@@ -134,7 +135,7 @@ The name of the SQS queue.
 #### emailBouncesTopicName
 The name of the SNS topic.
 
-## Dashboard Monitoring
+## Stats Dashboard
 
 The service writes log messages in JSON format, which makes it easier to analyze log data using Cloudwatch Insights. 
 
