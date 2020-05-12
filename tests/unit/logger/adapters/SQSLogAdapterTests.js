@@ -1,4 +1,5 @@
 const { expect } = require("chai"),
+      { SQSEventAdapter } = require("../../../../lib/handlers"),
       { SQSLogAdapter } = require("../../../../lib/logger");
 
 describe("SQSLogAdapter", () => {
@@ -11,7 +12,7 @@ describe("SQSLogAdapter", () => {
           {
             "messageId": "1234567890",
             "receiptHandle": "abcde",
-            "body": "{}",
+            "body": "{\"client\":\"app-client-test\"}",
             "attributes": {
               "ApproximateReceiveCount": "1",
               "SentTimestamp": "1568708487072",
@@ -32,6 +33,7 @@ describe("SQSLogAdapter", () => {
         level: null,
         name: null,
         payload: null,
+        client: "app-client-test",
         messageId: record.messageId,
         approximateReceiveCount: record.attributes.ApproximateReceiveCount,
         sentTimestamp: record.attributes.SentTimestamp,
@@ -45,6 +47,7 @@ describe("SQSLogAdapter", () => {
         time: null
       };
 
+      new SQSEventAdapter().adapt(event);
       const body = new SQSLogAdapter().adapt(event);
 
       expect(expected).to.deep.include(body);
