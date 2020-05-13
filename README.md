@@ -79,7 +79,7 @@ aws s3api create-bucket --bucket tiny-pigeon-email-service-deployment-artifacts 
 Once you have the name of the desired S3 bucket, change the attribute **deploymentBucket** in the serverless.yml file under the **custom** section:
 ```
 custom:
-  deploymentBucket: 'tiny-pigeon-email-service-deployment-artifacts
+  deploymentBucket: 'tiny-pigeon-email-service-deployment-artifacts'
 ```
 
 If you don't want to specify a deployment bucket, just remove the **deploymentBucket** attribute under the **provider** section:
