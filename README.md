@@ -170,13 +170,21 @@ The service will process SQS messages with the following JSON body:
   "cc": ["email1@email.com", "email2@email.com"],
   "bcc": ["email1@email.com", "email2@email.com"],
   "replyTo": "email@email.com",
-  "subject": "my subject",
-  "subjectParams": {
-    "foo": "bar"
+  "subject": {
+    "content": "Invoice ID: ${model.invoiceId}",
+    "params": { 
+      "model": { 
+        "invoiceId": "1234" 
+      } 
+    }
   },
-  "body": "my email body",
-  "bodyParams": {
-    "foo": "bar"
+  "body": {
+    "content": "Hello, Mr. ${model.lastName}",
+    "params": { 
+      "model": { 
+        "lastName": "Doe" 
+      } 
+    }
   },
   "template": {
     "dir": "/my/template/dir/",
@@ -222,16 +230,22 @@ One or more email address for the blind carbon copy.
 #### replyTo ```string``` (Required)
 Email address to reply the message.
 
-#### subject ```string``` (Required)
+#### subject ```object``` (Required)
+The email subject specification.
+
+#### subject.content ```string``` (Required)
 The email subject.
 
-#### subjectParams ```object```
+#### subject.params ```object```
 An object containing the attributes to be replaced in the subject text.
 
-#### body ```string``` (Required if **emailType** is ```RAW_TEXT``` or ```HTML_BODY```)
+#### body ```object``` (Required if **emailType** is ```RAW_TEXT``` or ```HTML_BODY```)
+The body object specification
+
+#### body.content ```string``` (Required)
 The content of the email
 
-#### bodyParams ```object```
+#### body.params ```object```
 An object containing the attributes to be replaced in the email body.
 
 #### template ```object``` (Required if **emailType** is ```HTML_TEMPLATE_FILE```)
@@ -286,8 +300,22 @@ const email = {
   from: "email@email.com",
   to: ["email@email.com"],
   replyTo: "no-reply@email.com",
-  subject: "Awesome Email",
-  body: "This is an awesome email!"
+  subject: {
+    content: "Invoice ID: ${model.invoiceId}",
+    params: { 
+      model: { 
+        invoiceId: "1234" 
+      } 
+    }
+  },
+  body: {
+    content: "Hello, Mr. ${model.lastName}",
+    params: { 
+      model: { 
+        lastName: "Doe" 
+      } 
+    }
+  }
 };
 
 sendEmail(email)
@@ -301,16 +329,20 @@ The service will transform the content of the **subject** and the **body** based
 ```
 {
   ...
-  "subject": "Invoice ID: ${model.invoiceId}",
-  "subjectParams": {
-    "model": {
-      "invoiceId": "1234"
+  "subject": {
+    "content": "Invoice ID: ${model.invoiceId}",
+    "params": { 
+      "model": { 
+        "invoiceId": "1234" 
+      } 
     }
   },
-  "body": "Hello, Mr. ${model.lastName}",
-  "bodyParams": {
-    "model": {
-      "lastName": "Doe"
+  "body": {
+    "content": "Hello, Mr. ${model.lastName}",
+    "params": { 
+      "model": { 
+        "lastName": "Doe" 
+      } 
     }
   }
 }
