@@ -62,8 +62,8 @@ describe("SendEmailUseCase", () => {
         emailType: EmailType.RAW_TEXT,
         from: "any@email.com",
         to: ["blacklisted@email.com"],
-        subject: "should fail",
-        body: "this will fail"
+        subject: {content:"should fail"},
+        body: {content:"this will fail"}
       };
 
       const useCase = new SendEmailUseCase(repository, emailGateway, fileStorageGateway);
@@ -102,8 +102,8 @@ describe("SendEmailUseCase", () => {
         emailType: EmailType.RAW_TEXT,
         from: "any@email.com",
         to: ["blacklisted@email.com"],
-        subject: "should fail",
-        body: "this will fail"
+        subject: {content:"should fail"},
+        body: {content:"this will fail"}
       };
 
       const useCase = new SendEmailUseCase(repository, emailGateway, fileStorageGateway);
@@ -134,8 +134,8 @@ describe("SendEmailUseCase", () => {
         emailType: EmailType.RAW_TEXT,
         from: "any@email.com",
         to: ["any@email.com"],
-        subject: "should fail",
-        body: "this will fail",
+        subject: {content:"should fail"},
+        body: {content:"this will fail"},
         attachments: [
           {
             dir: "any",
@@ -173,8 +173,8 @@ describe("SendEmailUseCase", () => {
         emailType: EmailType.HTML_TEMPLATE_FILE,
         from: "any@email.com",
         to: ["any@email.com"],
-        subject: "should fail",
-        body: "this will fail",
+        subject: {content:"should fail"},
+        body: {content:"this will fail"},
         template: { dir: "any", file: "any" }
       };
 
@@ -208,8 +208,8 @@ describe("SendEmailUseCase", () => {
         emailType: EmailType.HTML_TEMPLATE_FILE,
         from: "any@email.com",
         to: ["any@email.com"],
-        subject: "should be ok",
-        body: "this should be ok",
+        subject: {content:"should be ${status}", params:{status: "OK"}},
+        body: {content: "Hi, Mr ${model.lastName}", params: {model: {lastName: "Doe"}}},
         template: { dir: "any", file: "any" },
         attachments: [{ dir: "any", file: "any" }]
       };

@@ -11,7 +11,7 @@ describe("SQSEventAdapter", () => {
           {
             "messageId": "1234567890",
             "receiptHandle": "abcde",
-            "body": "{\"failOnBlacklistedEmail\":true,\"client\":\"my-client-service\",\"emailType\":\"RAW_TEXT\",\"from\":\"any@email.com\",\"to\":[\"any@email.com\"],\"replyTo\":[\"any@email\"],\"subject\":\"title\",\"body\":\"content\"}",
+            "body": "{\"failOnBlacklistedEmail\":true,\"client\":\"my-client-service\",\"emailType\":\"RAW_TEXT\",\"from\":\"any@email.com\",\"to\":[\"any@email.com\"],\"replyTo\":\"any@email\",\"subject\":{\"content\":\"title\"},\"body\":{\"content\":\"content\"}}",
             "attributes": {
               "ApproximateReceiveCount": "1",
               "SentTimestamp": "1568708487072",
