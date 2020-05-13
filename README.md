@@ -93,8 +93,8 @@ deploymentBucket:
 
 After the initial setup you can run the following command to deploy the service with the default settings:
 ```
-npm install --production
-serverless deploy --stage prod
+npm install && \
+  serverless deploy --stage prod
 ```
 
 ### Customize
